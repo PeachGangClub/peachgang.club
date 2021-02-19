@@ -146,7 +146,7 @@ const IndexPage: React.FC = () => {
         url={'/'}
       />
       <div>
-        <ActionHeader>{hyc} HYC</ActionHeader>
+        {commandInputIsOpen && <ActionHeader>{hyc} HYC</ActionHeader>}
         <ActionContainer isNight={isNight}>
           {commandInputIsOpen && (
             <>
@@ -159,7 +159,18 @@ const IndexPage: React.FC = () => {
           )}
 
           <div>
-            <Title isNight={isNight}>Peach Gang Club</Title>
+            <motion.div
+              initial={{ scale: 0, opacity: 1 }}
+              animate={{ scale: 1, opacity: commandInputIsOpen ? 0 : 1 }}
+              transition={{
+                type: 'spring',
+                stiffness: 260,
+                damping: 20,
+              }}
+            >
+              <Title isNight={isNight}>Peach Gang Club</Title>
+            </motion.div>
+
             <PGButton onClick={handleClickPeachGang}>
               <motion.img
                 src="/images/peachick.png"
