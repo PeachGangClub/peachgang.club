@@ -8,15 +8,18 @@ import AppHead from '../components/AppHead'
 import nightWithStars from '@iconify/icons-twemoji/night-with-stars'
 import cityscapeIcon from '@iconify/icons-twemoji/cityscape'
 import tornadoIcon from '@iconify/icons-twemoji/tornado'
+import videoGame from '@iconify/icons-twemoji/video-game'
 import twitterIcon from '@iconify/icons-logos/twitter'
 import radioactiveIcon from '@iconify/icons-twemoji/radioactive'
 import ActionIcon from '../components/AcionIcon'
 import Roulette from '../components/Roulette'
 import ReactGA from 'react-ga'
+import Retrogame from '../components/actions/Retrogame'
 
 type StyledProps = {
   isNight: boolean
 }
+
 const ActionHeader = styled.div`
   position: fixed;
   font-size: 16px;
@@ -59,6 +62,7 @@ const IndexPage: React.FC = () => {
   const [commandInputIsOpen, setCommandInputIsOpen] = useState<boolean>(false)
   const [isNight, setIsNight] = useState<boolean>(false)
   const [isOpenRoulette, setIsOpenRoulette] = useState<boolean>(false)
+  const [isOpenRetrogame, setIsOpenRetrogame] = useState<boolean>(false)
 
   const [rotate, setRotate] = useState<number>(0)
   const [commandText, setCommandText] = useState<string>('')
@@ -126,6 +130,9 @@ const IndexPage: React.FC = () => {
         setIsOpenRoulette(true)
         setHyc(hyc - 10)
         break
+      case 'retrogame':
+        setIsOpenRetrogame(true)
+        break
       case 'twitter':
         window.open('https://twitter.com/peachgangclub', '_blank')
         break
@@ -155,6 +162,7 @@ const IndexPage: React.FC = () => {
               <ActionIcon text="day-mode" icon={cityscapeIcon} onClick={handleClickActionIcon} />
               <ActionIcon text="spin" icon={tornadoIcon} onClick={handleClickActionIcon} />
               <ActionIcon text="roulette" icon={radioactiveIcon} onClick={handleClickActionIcon} />
+              <ActionIcon text="retrogame" icon={videoGame} onClick={handleClickActionIcon} />
             </>
           )}
 
@@ -213,6 +221,13 @@ const IndexPage: React.FC = () => {
           onFinish={(reward) => {
             setHyc(hyc + reward)
             setIsOpenRoulette(false)
+          }}
+        />
+      )}
+      {isOpenRetrogame && (
+        <Retrogame
+          onFinish={() => {
+            setIsOpenRetrogame(false)
           }}
         />
       )}
