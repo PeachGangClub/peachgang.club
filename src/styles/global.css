@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'TheStrongGamer';
+  src: url(/fonts/x8y12pxTheStrongGamer.ttf);
+}
+
 html {
   font-family: 'Noto Sans JP', sans-serif;
 }
