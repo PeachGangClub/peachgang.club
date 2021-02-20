@@ -25,7 +25,7 @@ module.exports = {
         'plugin:react-hooks/recommended', // React hooks rules
         'plugin:jsx-a11y/recommended', // Accessibility rules
         'prettier/@typescript-eslint', // Prettier plugin
-        'plugin:prettier/recommended', // Prettier recommended rules 
+        'plugin:prettier/recommended', // Prettier recommended rules
       ],
       rules: {
         // We will use TypeScript's types for component props instead
@@ -40,8 +40,12 @@ module.exports = {
         // Why would you want unused vars?
         '@typescript-eslint/no-unused-vars': ['error'],
 
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/consistent-type-assertions': [
+          'error',
+          { assertionStyle: 'as', objectLiteralTypeAssertions: 'allow-as-parameter' },
+        ],
         'prettier/prettier': ['error', {}, { usePrettierrc: true }], // Includes .prettierrc.js rules
       },
     },

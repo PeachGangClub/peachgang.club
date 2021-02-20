@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import randomcolor from 'randomcolor'
 import ReactGA from 'react-ga'
+import useHyc from '../hooks/useHyc'
 const Root = styled.div`
   position: fixed;
   top: 0;
@@ -11,10 +12,49 @@ const Root = styled.div`
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.1);
 `
+const Button = styled.button`
+  flex: 1;
+  vertical-align: top;
+  cursor: pointer;
+  border: none;
+  margin: 0 8px 0 4px;
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #43a047;
+  background-image: linear-gradient(to right, #0ba360, #3cb085, #2bb673);
+  padding: 10px 24px 6px 24px;
+  font-size: 12px;
+  border-radius: 10px;
+  :focus {
+    outline: none;
+  }
+`
+const InverseButton = styled.button`
+  flex: 1;
+
+  vertical-align: top;
+  cursor: pointer;
+  border: none;
+  margin: 0 4px 0 8px;
+  display: inline-block;
+  font-weight: bold;
+  color: #2bb673;
+  text-decoration: none;
+  background-color: #fff;
+  padding: 10px 24px 6px 24px;
+  font-size: 12px;
+  border-radius: 10px;
+  :focus {
+    outline: none;
+  }
+`
+
 const Container = styled.div`
   position: absolute;
   font-size: 16px;
-  top: 100px;
+  top: 40px;
   left: 50%;
   margin-left: -20px;
 `
@@ -32,8 +72,8 @@ const LinkButton = styled.a`
   display: inline-block;
   color: white;
   text-decoration: none;
-  background-color: #43a047;
-  background-image: linear-gradient(to right, #0ba360, #3cb085, #2bb673);
+  background-color: #ed6ea0;
+  background-image: linear-gradient(to right, #ed6ea0, #ffbea5, #f89abf);
   text-shadow: none;
   padding: 8px 16px;
   font-size: 16px;
@@ -47,20 +87,35 @@ const FlavorText = styled.div`
 `
 
 const Result = styled.div`
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 16px 0;
   border-radius: 16px;
   line-height: 30px;
   font-size: 30px;
   position: absolute;
-  top: 40px;
-  left: -183px;
+  top: 0px;
+  left: -180px;
   width: 100%;
   text-align: center;
   z-index: 100;
   color: #fff;
   font-weight: bold;
+  padding: 0 16px;
+`
+
+const ResultContent = styled.div`
+  background-color: rgba(0, 0, 0, 0.6);
   text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+  padding: 16px 0;
+  border-radius: 10px;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const NextActionWrap = styled.div`
+  margin-top: 4px;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 8px 0;
+  border-radius: 10px;
 `
 
 const CirclePanel = styled.div`
@@ -122,14 +177,15 @@ const generatePanelData = () => {
     return c
   })
 }
-;('')
+
 type Props = {
-  onFinish?: (reward: number) => void
+  onFinish: () => void
 }
 const Roulette: React.VFC<Props> = ({ onFinish }) => {
   const ref = useRef<HTMLDivElement>()
   const pgRef = useRef<HTMLImageElement>()
   const [panelData] = useState(generatePanelData())
+  const { hyc, setHyc } = useHyc()
   const [result, setResult] = useState<{
     number: number
     color: string
@@ -141,7 +197,13 @@ const Roulette: React.VFC<Props> = ({ onFinish }) => {
     text: string
   } | null>(null)
 
+  const handleClickRetryButton = () => {
+    setResult(null)
+  }
+
   useEffect(() => {
+    if (result) return
+    setHyc(hyc - 10)
     let r = 0
     let a = Math.random() + 0.2
     let v = Math.random() * 3
@@ -161,17 +223,14 @@ const Roulette: React.VFC<Props> = ({ onFinish }) => {
         let index = Math.floor((360 - (r - 5)) / 10)
         if (index >= 36) index = 0
         setResult(panelData[index])
-        setTimeout(() => {
-          ReactGA.event({
-            category: '統計データ',
-            action: 'ルーレット結果',
-            label: panelData[index].title,
-            value: panelData[index].reward,
-          })
-          onFinish && onFinish(panelData[index].reward)
-        }, 3000)
+        ReactGA.event({
+          category: '統計データ',
+          action: 'ルーレット結果',
+          label: panelData[index].title,
+          value: panelData[index].reward,
+        })
+        setHyc(panelData[index].reward)
       }
-      // r += r + v
       if (r > 360) {
         r -= 360
       }
@@ -183,7 +242,8 @@ const Roulette: React.VFC<Props> = ({ onFinish }) => {
     return () => {
       clearInterval(timeout)
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result])
 
   return (
     <Root>
@@ -210,31 +270,47 @@ const Roulette: React.VFC<Props> = ({ onFinish }) => {
         </CirclePanel>
         {result && (
           <Result>
-            {result.title}
-            <br />
-            <div>
-              <small style={{ fontSize: 14 }}>+{result.reward}HYC</small>
-            </div>
-            {result.image && (
+            <ResultContent>
               <div>
-                <img
-                  src={result.image}
-                  alt={result.title}
-                  height={140}
-                  style={{ borderRadius: 10, display: 'inline-block', margin: 16 }}
-                />
+                {result.title}
+                <br />
+                <div>
+                  <small style={{ fontSize: 14 }}>+{result.reward}HYC</small>
+                </div>
+                {result.image && (
+                  <div>
+                    <img
+                      src={result.image}
+                      alt={result.title}
+                      height={140}
+                      style={{ borderRadius: 10, display: 'inline-block', margin: 16 }}
+                    />
+                  </div>
+                )}
+                <div>
+                  <FlavorText>{result.text}</FlavorText>
+                </div>
+                {result.link && (
+                  <div>
+                    <LinkButton href={result.link} target="_blank" rel="noreferrer">
+                      今すぐ購入
+                    </LinkButton>
+                  </div>
+                )}
               </div>
-            )}
-            <div>
-              <FlavorText>{result.text}</FlavorText>
-            </div>
-            {result.link && (
-              <div>
-                <LinkButton href={result.link} target="_blank" rel="noreferrer">
-                  今すぐ購入
-                </LinkButton>
+            </ResultContent>
+            <NextActionWrap>
+              <div style={{ display: 'flex' }}>
+                <InverseButton
+                  onClick={() => {
+                    onFinish()
+                  }}
+                >
+                  やめる
+                </InverseButton>
+                <Button onClick={handleClickRetryButton}>回す</Button>
               </div>
-            )}
+            </NextActionWrap>
           </Result>
         )}
       </Container>

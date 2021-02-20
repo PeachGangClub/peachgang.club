@@ -15,6 +15,7 @@ import ActionIcon from '../components/AcionIcon'
 import Roulette from '../components/Roulette'
 import ReactGA from 'react-ga'
 import Retrogame from '../components/actions/Retrogame'
+import HycText from '../components/HycText'
 
 type StyledProps = {
   isNight: boolean
@@ -66,11 +67,6 @@ const IndexPage: React.FC = () => {
 
   const [rotate, setRotate] = useState<number>(0)
   const [commandText, setCommandText] = useState<string>('')
-  const [hyc, setHyc] = useState<number>(0)
-  useEffect(() => {
-    if (!hyc) return
-    window.localStorage.setItem('club.peachgung.hyc', `${hyc}`)
-  }, [hyc])
   useEffect(() => {
     fetch(
       'https://docs.google.com/spreadsheets/d/e/2PACX-1vR04bDEoPZUExwsnXZsxzDx5Ii09DM_U4IanJD-NASu1yrXyp_rYp6EGUuiUsSYF-3rwwlBwzTPEqQi/pub?output=csv'
@@ -94,16 +90,7 @@ const IndexPage: React.FC = () => {
       })
     })
   }, [commandInputIsOpen])
-  useEffect(() => {
-    const h = +(window.localStorage.getItem('club.peachgung.hyc') ?? 0)
-    if (h === Infinity) {
-      alert('ハッキングやめてください')
-      setHyc(-99999999)
-      return
-    }
-    window.localStorage.setItem('club.peachgung.hyc', `${h}`)
-    setHyc(h)
-  }, [])
+
   const handleClickPeachGang = () => {
     setCommandInputIsOpen(true)
   }
@@ -128,7 +115,6 @@ const IndexPage: React.FC = () => {
         break
       case 'roulette':
         setIsOpenRoulette(true)
-        setHyc(hyc - 10)
         break
       case 'retrogame':
         setIsOpenRetrogame(true)
@@ -153,7 +139,11 @@ const IndexPage: React.FC = () => {
         url={'/'}
       />
       <div>
-        {commandInputIsOpen && <ActionHeader>{hyc} HYC</ActionHeader>}
+        {commandInputIsOpen && (
+          <ActionHeader>
+            <HycText />
+          </ActionHeader>
+        )}
         <ActionContainer isNight={isNight}>
           {commandInputIsOpen && (
             <>
@@ -218,8 +208,7 @@ const IndexPage: React.FC = () => {
       </div>
       {isOpenRoulette && (
         <Roulette
-          onFinish={(reward) => {
-            setHyc(hyc + reward)
+          onFinish={() => {
             setIsOpenRoulette(false)
           }}
         />

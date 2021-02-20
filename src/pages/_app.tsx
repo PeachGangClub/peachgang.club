@@ -4,11 +4,12 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from '../styles/theme'
 import '../styles/global.css'
 import ReactGA from 'react-ga'
+import HycContextProvider from '../contexts/HycContext'
 ReactGA.initialize('UA-48876391-9')
 const App = ({ Component, pageProps }: AppProps) => (
   <>
     <Head>
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <meta name="viewport" content="width=device-width, initial-scale=0.9, shrink-to-fit=no" />
       <link rel="shortcut icon" href="/images/peachick.png" key="shortcutIcon" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link
@@ -21,7 +22,9 @@ const App = ({ Component, pageProps }: AppProps) => (
       />
     </Head>
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <HycContextProvider>
+        <Component {...pageProps} />
+      </HycContextProvider>
     </ThemeProvider>
   </>
 )
