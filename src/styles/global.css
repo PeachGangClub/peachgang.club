@@ -3,9 +3,13 @@
   src: url(/fonts/x8y12pxTheStrongGamer.ttf);
 }
 
-html {
+html, body, #__next {
+  margin: 0;
+  height: 100%;
+  width: 100%;
   font-family: 'Noto Sans JP', sans-serif;
 }
 * {
     box-sizing: border-box;
 }
+
