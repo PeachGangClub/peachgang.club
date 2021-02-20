@@ -14,19 +14,24 @@
     "lint:fix": "eslint '**/*.{ts,tsx}' --fix"
   },
   "dependencies": {
+    "@iconify/icons-ion": "^1.1.2",
     "@iconify/icons-logos": "^1.1.6",
     "@iconify/icons-twemoji": "^1.1.0",
     "@iconify/react": "^1.1.4",
+    "@types/firebase": "^3.2.1",
     "csv-parser": "^3.0.0",
+    "firebase": "^8.2.9",
     "firebase-admin": "^9.4.2",
     "firebase-functions": "^3.13.0",
     "framer-motion": "^3.1.1",
+    "html-to-image": "^1.3.21",
     "next": "latest",
     "randomcolor": "^0.6.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-ga": "^3.3.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "^12.13.0",
