@@ -229,7 +229,7 @@ const Roulette: React.VFC<Props> = ({ onFinish }) => {
           label: panelData[index].title,
           value: panelData[index].reward,
         })
-        setHyc(panelData[index].reward)
+        setHyc(hyc + panelData[index].reward)
       }
       if (r > 360) {
         r -= 360
