@@ -2,11 +2,21 @@ import React from 'react'
 import styled from 'styled-components'
 
 import useHyc from '../hooks/useHyc'
-const Root = styled.span``
 
-const HycText: React.VFC = () => {
+type StyledProps = {
+  isNight: boolean
+}
+
+const Root = styled.span<StyledProps>`
+ color: ${({ isNight }) => { return isNight ? "#0f0" : "#000" }};
+`
+
+type Props = {
+  isNight: boolean
+}
+const HycText: React.VFC<Props> = ({ isNight }) => {
   const { hyc } = useHyc()
 
-  return <Root>{hyc}HYC</Root>
+  return <Root isNight={isNight}>{hyc}HYC</Root>
 }
 export default HycText

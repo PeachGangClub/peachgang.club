@@ -141,7 +141,7 @@ const IndexPage: React.FC = () => {
       <div>
         {commandInputIsOpen && (
           <ActionHeader>
-            <HycText />
+            <HycText isNight={isNight} />
           </ActionHeader>
         )}
         <ActionContainer isNight={isNight}>
