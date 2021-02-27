@@ -35,8 +35,6 @@ const CloseButton = styled.button`
 `
 
 const GameDisplay = styled.canvas`
-  width: 300px;
-  height: 500px;
   background-color: skyblue;
   margin: 0;
 `
@@ -84,7 +82,7 @@ const Luftpiyonza: React.VFC<Props> = ({ onFinish }) => {
             ❌
           </span>
         </CloseButton>
-        <GameDisplay ref={display} />
+        <GameDisplay ref={display} width="300px" height="500px" />
         <JumpButton onClick={handleClick}>TAP</JumpButton>
       </Container>
     </Root>
