@@ -11,11 +11,13 @@ import tornadoIcon from '@iconify/icons-twemoji/tornado'
 import videoGame from '@iconify/icons-twemoji/video-game'
 import twitterIcon from '@iconify/icons-logos/twitter'
 import radioactiveIcon from '@iconify/icons-twemoji/radioactive'
+import airplaneIcon from '@iconify/icons-twemoji/airplane'
 import ActionIcon from '../components/AcionIcon'
 import Roulette from '../components/Roulette'
 import ReactGA from 'react-ga'
 import Retrogame from '../components/actions/Retrogame'
 import HycText from '../components/HycText'
+import Luftpiyonza from '../components/actions/Luftpiyonza'
 
 type StyledProps = {
   isNight: boolean
@@ -64,6 +66,7 @@ const IndexPage: React.FC = () => {
   const [isNight, setIsNight] = useState<boolean>(false)
   const [isOpenRoulette, setIsOpenRoulette] = useState<boolean>(false)
   const [isOpenRetrogame, setIsOpenRetrogame] = useState<boolean>(false)
+  const [isOpenLuftpiyonza, setIsOpenLuftpiyonza] = useState<boolean>(false)
 
   const [rotate, setRotate] = useState<number>(0)
   const [commandText, setCommandText] = useState<string>('')
@@ -122,6 +125,9 @@ const IndexPage: React.FC = () => {
       case 'twitter':
         window.open('https://twitter.com/peachgangclub', '_blank')
         break
+      case 'luftpiyonza':
+        setIsOpenLuftpiyonza(true)
+        break
     }
 
     setCommandText('')
@@ -153,6 +159,7 @@ const IndexPage: React.FC = () => {
               <ActionIcon text="spin" icon={tornadoIcon} onClick={handleClickActionIcon} />
               <ActionIcon text="roulette" icon={radioactiveIcon} onClick={handleClickActionIcon} />
               <ActionIcon text="retrogame" icon={videoGame} onClick={handleClickActionIcon} />
+              <ActionIcon text="luftpiyonza" icon={airplaneIcon} onClick={handleClickActionIcon} />
             </>
           )}
 
@@ -217,6 +224,13 @@ const IndexPage: React.FC = () => {
         <Retrogame
           onFinish={() => {
             setIsOpenRetrogame(false)
+          }}
+        />
+      )}
+      {isOpenLuftpiyonza && (
+        <Luftpiyonza
+          onFinish={() => {
+            setIsOpenLuftpiyonza(false)
           }}
         />
       )}
