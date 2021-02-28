@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import ReactGA from 'react-ga'
 
 import Game from './LuftpiyonzaGame'
 
@@ -103,7 +104,15 @@ const Luftpiyonza: React.VFC<Props> = ({ onFinish }) => {
 
   const [gameState, setGameState] = React.useState<'Result' | 'Start' | 'InGame'>('Start')
   const [score, setScore] = React.useState(0)
-
+  useEffect(() => {
+    if (score === 0) return
+    ReactGA.event({
+      category: '統計データ',
+      action: 'ゲームスコア',
+      label: 'ルフトピヨンザ航空',
+      value: score,
+    })
+  }, [score])
   useEffect(() => {
     Game.setCanvas(display.current)
     Game.setGameoverCallback((result: number) => {
@@ -134,6 +143,7 @@ const Luftpiyonza: React.VFC<Props> = ({ onFinish }) => {
 
   const handleRestart = () => {
     setGameState('Start')
+    setScore(0)
     Game.start()
   }
   return (
