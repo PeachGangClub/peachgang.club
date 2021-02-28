@@ -53,9 +53,12 @@ class LuftpiyonzaGame {
       AircraftPosX + AircraftHitbox / 2,
       this.height - this.aircraft.pos + AircraftHitbox / 2
     )
-    this.ctx.rotate((6 * (-6 - this.aircraft.accel) * Math.PI) / 180)
-    this.ctx.drawImage(this.ImgAircraft, -37, -22, 60, 39)
-    this.ctx.restore()
+
+    if (this.ImgAircraft) {
+      this.ctx.rotate((6 * (-6 - this.aircraft.accel) * Math.PI) / 180)
+      this.ctx.drawImage(this.ImgAircraft, -37, -22, 60, 39)
+      this.ctx.restore()
+    }
 
     // this.ctx.fillStyle = 'red'
     // this.ctx.fillRect(AircraftPosX, this.height - this.aircraft.pos, AircraftHitbox, AircraftHitbox)
@@ -158,11 +161,13 @@ class LuftpiyonzaGame {
   }
 
   up() {
-    if (!this.isStart) {
+    if (!this.isStart && this.ImgAircraft) {
       this.startCallback()
       this.isStart = true
+      this.aircraft.accel += UpAccel
+    } else {
+      this.aircraft.accel += UpAccel
     }
-    this.aircraft.accel += UpAccel
   }
 }
 
