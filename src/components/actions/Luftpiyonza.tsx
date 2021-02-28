@@ -105,6 +105,11 @@ const Luftpiyonza: React.VFC<Props> = ({ onFinish }) => {
   const [score, setScore] = React.useState(0)
 
   useEffect(() => {
+    const img = new Image()
+    img.src = '/images/luftpiyonza.png'
+    img.onload = () => {
+      Game.setImage(img)
+    }
     Game.setCanvas(display.current)
     Game.setGameoverCallback((result: number) => {
       setScore(result)

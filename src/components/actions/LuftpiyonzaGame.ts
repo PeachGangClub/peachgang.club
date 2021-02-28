@@ -20,6 +20,7 @@ interface Aircraft {
 }
 
 class LuftpiyonzaGame {
+  private ImgAircraft: HTMLImageElement
   private ctx: CanvasRenderingContext2D
   private gameoverCallback: (score: number) => void
   private startCallback: () => void
@@ -47,10 +48,17 @@ class LuftpiyonzaGame {
       this.ctx.fillRect(this.width - block.pos.x, block.size + block.pos.y, BlockWidth, this.height)
     })
 
-    this.ctx.beginPath()
-    this.ctx.fillStyle = 'red'
-    this.ctx.fillRect(AircraftPosX, this.height - this.aircraft.pos, AircraftHitbox, AircraftHitbox)
-    this.ctx.fill()
+    this.ctx.save()
+    this.ctx.translate(
+      AircraftPosX + AircraftHitbox / 2,
+      this.height - this.aircraft.pos + AircraftHitbox / 2
+    )
+    this.ctx.rotate((6 * (-6 - this.aircraft.accel) * Math.PI) / 180)
+    this.ctx.drawImage(this.ImgAircraft, -37, -22, 60, 39)
+    this.ctx.restore()
+
+    // this.ctx.fillStyle = 'red'
+    // this.ctx.fillRect(AircraftPosX, this.height - this.aircraft.pos, AircraftHitbox, AircraftHitbox)
 
     this.ctx.fillStyle = 'white'
     this.ctx.fillText(`SCORE: ${this.score}`, 10, 20)
@@ -120,6 +128,10 @@ class LuftpiyonzaGame {
     this.ctx = canvas.getContext('2d')
     this.width = canvas.width
     this.height = canvas.height
+  }
+
+  setImage(img: HTMLImageElement) {
+    this.ImgAircraft = img
   }
 
   setGameoverCallback(callback) {
